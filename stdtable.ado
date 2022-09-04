@@ -1,4 +1,4 @@
-*! version 1.1.0 20Jan2017 MLB
+*! version 1.2.0 20Jan2017 MLB
 program define stdtable, rclass
 	version 11.2
 	syntax varlist(min=2 max=2) [if] [in] [aweight iweight fweight], ///
@@ -276,6 +276,13 @@ program define stdtable, rclass
 		label variable std "standardized counts"
 		restore, not
 	}
+	return local rowvar "`r'"
+	return local colvar "`c'"
+	return local byvar  "`by'"
+	return local kc = `kc'
+	return local kr = `kr'
+	if "`raw'" != "" return local raw "raw"	
+	return local cmd "stdtable"
 end
 
 program define Parseby, rclass
