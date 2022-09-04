@@ -26,9 +26,6 @@ drop dif
 bys feduc (meduc): gen double dif = reldif(std,std[_N]) if meduc == .
 assert dif < 1e-6 if meduc == .
 
-rcof "noi stdtable meduc feduc, by(coh, baseline(1970)) row" == 198
-rcof "noi stdtable meduc feduc, by(coh, baseline(1970)) col" == 198
-
 // string in by()
 use bench\homogamy.dta, clear
 decode coh, gen(cohstring)

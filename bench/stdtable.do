@@ -24,6 +24,17 @@ predict double mu
 
 assert reldif(std,mu) < 1e-6 if !missing(row,col)
 
+// format of saved variables 
+// (default format is %9.3g)
+keep row col _freq
+stdtable row col [fw=_freq], replace raw
+assert "`:format std'" == "%9.3g"
+
+// specified format
+keep row col _freq
+stdtable row col [fw=_freq], replace raw format(%5.0f)
+assert "`:format std'" == "%5.0f"
+
 // weights
 keep row col _freq
 stdtable row col [fw=_freq], replace raw

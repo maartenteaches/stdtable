@@ -13,5 +13,4 @@ assert reldif(std,10) < 1e-6 if feduc == . & meduc < .
 assert reldif(std,10) < 1e-6 if meduc == . & feduc < .
 assert reldif(std,50) < 1e-6 if feduc == . & meduc == .
 
-rcof "noi stdtable meduc feduc, baserow(base) basecol(base) by(coh) row" == 198
-rcof "noi stdtable meduc feduc, baserow(base) basecol(base) by(coh) col" == 198
+

@@ -1,0 +1,112 @@
+{smcl}
+
+{txt}{net "from http://repec.org/bocode":SSC} Stata modules created or revised 2019-12-08 to 2020-01-08
+{hline}
+
+{net "describe http://repec.org/bocode/c/cub":CUB}
+{txt} module to estimate ordinal outcome model estimated by a mixture of a uniform and a shifted binomial{txt} Authors: Giovanni Cerulli       Req: Stata version 14.1
+{txt} Created: 2020-01-06
+
+{net "describe http://repec.org/bocode/g/getmxdata":GETMXDATA}
+{txt} module to import Mexican economic data {txt} Authors: Miguel Gonzalez       Req: Stata version 13 and moss from SSC (q.v.)
+{txt} Created: 2020-01-05
+
+{net "describe http://repec.org/bocode/a/anythingtodate":ANYTHINGTODATE}
+{txt} module to convert all types of date variables to Stata date variables{txt} Authors: Nobuaki Michihata       Req: Stata version 11
+{txt} Created: 2019-12-26
+
+{net "describe http://repec.org/bocode/s/speccheck":SPECCHECK}
+{txt} module to check model specification{txt} Authors: Nikolai Cook       Req: Stata version 8 and tuples from SSC (q.v.)
+{txt} Revised: 2019-12-31
+
+{net "describe http://repec.org/bocode/i/ineqord":INEQORD}
+{txt} module to calculate indices of inequality and polarization for ordinal data{txt} Authors: Stephen P. Jenkins       Req: Stata version 14
+{txt} Created: 2019-12-14
+
+{net "describe http://repec.org/bocode/i/importsav":IMPORTSAV}
+{txt} module to convert SPSS file to Stata {txt} Authors: JeongHoon Min       Req: Stata version 10 and whereis from SSC (q.v.), with R installed
+{txt} Created: 2019-12-13
+
+{net "describe http://repec.org/bocode/s/sublime":SUBLIME}
+{txt} module to set up StataEditor (a package of Sublime Text) automatically{txt} Authors: JeongHoon Min       Req: Stata version 10
+{txt} Created: 2019-12-13
+
+{net "describe http://repec.org/bocode/m/metafrag":METAFRAG}
+{txt} module to compute the fragility index for meta-analysis{txt} Authors: Ariel Linden       Req: Stata version 16
+{txt} Revised: 2019-12-31
+
+{net "describe http://repec.org/bocode/x/xtable":XTABLE}
+{txt} module for exporting table output to Excel {txt} Authors:  Weverthon Machado       Req: Stata version 13.1
+{txt} Revised: 2019-12-22
+
+{net "describe http://repec.org/bocode/d/did_multiplegt":DID_MULTIPLEGT}
+{txt} module to estimate sharp Difference-in-Difference designs with multiple groups and periods{txt} Authors:  Clément de Chaisemartin    Xavier D'Haultfoeuille   Yannick Guyonvarch       Req: Stata version 13.1 and fuzzydid from SSC (q.v.)
+{txt} Revised: 2020-01-04
+
+{net "describe http://repec.org/bocode/r/rforest":RFOREST}
+{txt} module to implement Random Forest algorithm{txt} Authors: Rosie Yuyan Zou  Matthias Schonlau       Req: Stata version 15
+{txt} Revised: 2020-01-04
+
+{net "describe http://repec.org/bocode/f/forest":FOREST}
+{txt} module to visualize results from multiple regressions on a single independent variable{txt} Authors: Benjamin Daniels       Req: Stata version 13.1
+{txt} Revised: 2019-12-21
+
+{net "describe http://repec.org/bocode/s/sumstats":SUMSTATS}
+{txt} module to produce tables of summary statistics{txt} Authors: Benjamin Daniels       Req: Stata version 15.1
+{txt} Revised: 2019-12-21
+
+{net "describe http://repec.org/bocode/b/betterbar":BETTERBAR}
+{txt} module to produce bar graphs with optional standard error bars and cross-group comparisons{txt} Authors: Benjamin Daniels       Req: Stata version 13.1
+{txt} Revised: 2019-12-21
+
+{net "describe http://repec.org/bocode/e/elabel":ELABEL}
+{txt} module to extend the label commands{txt} Authors: Daniel Klein       Req: Stata version 11.2
+{txt} Revised: 2019-12-11
+
+{net "describe http://repec.org/bocode/b/boost":BOOST}
+{txt} module to perform boosted regression{txt} Authors: Matthias Schonlau       Req: Stata version 8.1
+{txt} Revised: 2020-01-04
+
+{net "describe http://repec.org/bocode/p/pmcalplot":PMCALPLOT}
+{txt} module to produce calibration plot of prediction model performance{txt} Authors:  Joie Ensor   Kym IE. Snell  Emma C. Martin       Req: Stata version 14.2
+{txt} Revised: 2020-01-04
+
+{net "describe http://repec.org/bocode/m/markstat":MARKSTAT}
+{txt} module to support literate data analysis using Stata and Markdown{txt} Authors:  German Rodriguez       Req: Stata version 14, whereis from SSC, pandoc
+{txt} Revised: 2019-12-13
+
+{net "describe http://repec.org/bocode/r/rwolf":RWOLF}
+{txt} module to calculate Romano-Wolf stepdown p-values for multiple hypothesis testing{txt} Authors: Damian Clarke       Req: Stata version 11
+{txt} Revised: 2019-12-21
+
+{net "describe http://repec.org/bocode/n/nstage":NSTAGE}
+{txt} module for multi-arm, multi-stage (MAMS) trial designs for time-to-event outcomes{txt} Authors: Patrick Royston  Daniel Bratton   Babak Choodari-Oskooei   Frederike Maria-Sophie Barthel       Req: Stata version 10
+{txt} Revised: 2019-12-10
+
+{net "describe http://repec.org/bocode/r/repest":REPEST}
+{txt} module to run estimations with weighted replicate samples and plausible values{txt} Authors: Francesco Avvisati  François Keslair       Req: Stata version 11
+{txt} Revised: 2020-01-06
+
+{net "describe http://repec.org/bocode/s/stmixed":STMIXED}
+{txt} module to fit multilevel mixed effects parametric survival models{txt} Authors: Michael J. Crowther       Req: Stata version 14.2 and merlin from SSC (q.v.)
+{txt} Revised: 2019-12-17
+
+{net "describe http://repec.org/bocode/d/diff":DIFF}
+{txt} module to perform Differences in Differences estimation{txt} Authors: Juan M. Villa       Req: Stata version 10.0
+{txt} Revised: 2019-12-31
+
+{net "describe http://repec.org/bocode/x/xsvmat":XSVMAT}
+{txt} module to convert a matrix to variables in an output dataset{txt} Authors: Roger Newson       Req: Stata version 16.0
+{txt} Revised: 2019-12-31
+
+{net "describe http://repec.org/bocode/c/cmp":CMP}
+{txt} module to implement conditional (recursive) mixed process estimator{txt} Authors: David Roodman       Req: Stata version 11 and package ghk2 (q.v.)
+{txt} Revised: 2019-12-22
+
+{net "describe http://repec.org/bocode/x/xcontract":XCONTRACT}
+{txt} module to make a data set of frequencies and percents on disk or in memory{txt} Authors: Roger Newson       Req: Stata version 16.0
+{txt} Revised: 2019-12-31
+
+{hline}
+{txt} End of recent additions and updates
+

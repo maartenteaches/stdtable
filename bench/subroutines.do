@@ -40,3 +40,20 @@ collapse (sum) weight, by(meduc feduc coh)
 drop if missing(meduc,feduc,coh)
 merge 1:1 meduc feduc coh using `temp'
 assert reldif(weight,_freq) < 1e-6 
+
+// ------------------------ Parseframe
+if c(stata_version) >= 16 {
+	Parseframe default, replace
+	assert `"`r(framereplace)'"' == `"replace"'
+	assert `"`r(frame)'"'        == `"default"'
+	assert `"`r(current)'"'      == `"default"'
+	assert         r(iscurrent) == 1
+	
+	Parseframe foo
+	assert `"`r(frame)'"'   == `"foo"'
+	assert `"`r(current)'"' == `"default"'
+	assert `"`r(framereplace)'"' == ""
+	assert  r(iscurrent) == 0
+
+	rcof "noi Parseframe default" == 110
+}

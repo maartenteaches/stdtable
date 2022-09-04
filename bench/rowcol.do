@@ -62,10 +62,31 @@ label define ed 1 "< secondary" ///
                 4 "post-sec" 
 label value ed ed
 
+preserve
 stdtable support ed [fw=freq], raw replace row
-assert std == 100 if ed == .      // rowtotals are 100
+assert   std == 100 if ed == .      // rowtotals are 100
+assert _freq == 100 if ed == .      // raw is also row percentage, so rowtotal = 100 
 
-stdtable support ed [fw=_freq], raw replace col
-assert std == 100 if support == . // coltotals are 100
 
-rcof "noi stdtable support ed [fw=_freq], row col" == 198
+restore
+
+preserve
+stdtable support ed [fw=freq], raw replace col
+assert   std == 100 if support == . // coltotals are 100
+assert _freq == 100 if support == . // raw rowtotals are also 100
+restore
+
+rcof "noi stdtable support ed [fw=freq], row col" == 198
+
+use bench\homogamy.dta, clear
+preserve
+stdtable meduc feduc, by(coh, baseline(1970)) raw row replace tol(1e-15)
+assert   std == 100 if feduc == .      // rowtotals are 100
+assert _freq == 100 if feduc == .      // raw is also row percentage, so rowtotal = 100 
+restore
+
+preserve
+stdtable meduc feduc, by(coh, baseline(1970)) raw col replace tol(1e-15)
+assert   std == 100 if meduc == .      // coltotals are 100
+assert _freq == 100 if meduc == .      // raw is also col percentage, so coltotal = 100 
+restore
