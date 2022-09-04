@@ -36,6 +36,11 @@
 is square, and to row totals of 100/(number of rows) and column totals of 
 100/(number of columns) if the table is not square.
 
+{synopt:{opt row}}Standardize such that they can be interpreted as standardized
+row percentages.{p_end}
+{synopt:{opt col}}Standardize such that they can be interpreted as standardized
+column percentages.{p_end}
+
 {synopt:{opth f:ormat(%fmt)}}specifies the display format for the output{p_end}
 {synopt:{opt raw}}also displays the raw counts.{p_end}
 {synopt:{opt replace}}replace current data with standardized (and raw) counts.{p_end}
@@ -188,8 +193,19 @@ of one cohort, say 1980.
 
 {phang}
 The default is to standardize to row and column totals of all 100s if the table
-is square, and to row totals of 100/(number of rows) and column totals of 
-100/(number of columns) if the table is not square.
+is square. In that case the standardized counts can be interpreted as row percentages
+and as column percentages. if the table is not square, then the default is to 
+standardize the row totals to 100/(number of rows) and the column totals to 
+100/(number of columns). In that case the standardized counts can be interpreted 
+as cell percentages.
+
+{phang}
+{opt row} Standardize such that the output can be interpreted as standardized
+row percentages.
+
+{phang}
+{opt col} Standardize such that the output can be interpreted as standardized
+column percentages.
 
 {phang}
 {opth f:ormat(%fmt)}specifies the display format for the output{p_end}

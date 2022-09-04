@@ -1,11 +1,11 @@
-*! version 1.0.0 26Mar2016 MLB
+*! version 1.1.0 20Jan2017 MLB
 program define stdtable, rclass
 	version 11.2
 	syntax varlist(min=2 max=2) [if] [in] [aweight iweight fweight], ///
        [raw replace by(string)                                       ///
        BASERow(namelist min=1 max=1) BASECol(namelist min=1 max=1)   ///
        TOLerance(real 1e-6) ITERate(integer `c(maxiter)') log        ///
-       Format(string) * ]
+       Format(string) row col * ]
 
 
 	if "`weight'" != "" local wgt "[`weight'`exp']"
@@ -42,11 +42,20 @@ program define stdtable, rclass
 		exit 198
 	}
 	if "`baserow'" != "" & "`baseline'" != "" {
-		di as err "baseline() cannot be specified when specifying baserow() and basecol()"
+		di as err "{p}baseline() cannot be specified when specifying baserow() and basecol(){p_end}"
 		exit 198
 	}
 	if "`baserow'" != "" {
 		confirm matrix `baserow' `basecol'
+	}
+	if ("`baseline'" != "" | "`baserow'`basecol'" != "") & ///
+       ("`row'" != "" | "`col'" != "") {
+		di as err "{p}the row and col options cannot be specified with  the baseline(), baserow() or basecol() options{p_end}"
+		exit 198
+	}
+	if "`row'" != "" & "`col'" != "" {
+		di as err "the row and col options cannot be specified together"
+		exit 198
 	}
 
 
@@ -134,12 +143,18 @@ program define stdtable, rclass
 	else {
 		bys `r' : gen byte `mark' = _n == 1 
 		qui count if `mark'
-		local k = r(N)
+		local kr = r(N)
 		qui bys `c' : replace `mark' = _n == 1
 		qui count if `mark'
-		if r(N) != `k' {
-			gen double `basec' = 100/r(N)
-			gen double `baser' = 100/`k'
+		local kc = r(N)
+		if `kc' == `kr' & "`row'`col'" != "" {
+			// the default is then to already show row and col percentages
+			local row ""
+			local col ""
+		} 
+		if `kc' != `kr' {
+			gen double `basec' = 100/`kc'
+			gen double `baser' = 100/`kr'
 		}
 		else {
 			gen double `basec' = 100
@@ -226,6 +241,14 @@ program define stdtable, rclass
 		}
 	}
 
+	if "`row'" != "" {
+		qui replace `muhat' = `kr'*`muhat' if `r' < .
+	}
+	if "`col'" != "" {
+		qui replace `muhat' = `kc'*`muhat' if `c' < .
+	}
+
+
 	// display the result
 	if "`raw'" != "" {
 		local freqopt "`freq'"
@@ -235,7 +258,7 @@ program define stdtable, rclass
 	}
 	tabdisp `r' `c' , `byopt' cellvar(`muhat' `freqopt') totals format(`format') `options'
 
-	//
+	// restore or replace original data
 	if "`replace'" == "" {
 		restore
 	}
