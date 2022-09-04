@@ -234,6 +234,7 @@ program define stdtable, rclass
 			replace `c' = . if `tot' == 1 
 		}
 		replace `muhat' = 0 if `tot' == 1
+		recast double `tot'
 		bys `by' `r' (`c') : replace `tot' = sum(`muhat')
 		bys `by' `r' (`tot') : replace `muhat' = `tot'[_N] if missing(`c')
 		if "`raw'" != "" {
@@ -253,6 +254,7 @@ program define stdtable, rclass
 			replace `r' = . if `tot' == 1
 		}
 		replace `muhat' = 0 if `tot' == 1
+		recast double `tot'
 		bys `by' `c' (`r') : replace `tot' = sum(`muhat')
 		bys `by' `c' (`tot') : replace `muhat' = `tot'[_N] if missing(`r')
 		if "`raw'" != "" {

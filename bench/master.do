@@ -1,7 +1,7 @@
 cscript
 discard
 set more off
-cd "d:\mijn documenten\projecten\stata\stdtable\1.3.0"
+cd "c:\mijn documenten\projecten\stata\stdtable\"
 do bench\stdtable.do
 do bench\string.do
 do bench\subroutines.do
