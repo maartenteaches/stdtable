@@ -17,7 +17,7 @@ assert c(k) == 4
 ds 
 assert `"`r(varlist)'"' == `"meduc feduc coh std"'
 sum std, meanonly
-assert         r(max)   == 2984
+assert reldif( r(max)    , 2984) < 1E-8
 assert         r(min)   == 0
 assert reldif( r(mean)   , 331.5555555555555 ) <  1E-8
 assert         r(N)     == 252

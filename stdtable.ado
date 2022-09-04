@@ -1,9 +1,10 @@
-*! version 1.3.0 18Nov2019 MLB
-* replace(framename) 
-* row and col allowed with by(,basline())
-* format also used for saved variables
+*! version 1.4.0 04Sep2022 MLB
+* use table for display
 program define stdtable, rclass
-	if c(version) >= 16 {
+	if c(version) >= 17 {
+		version 17
+	}
+	else if c(version) >= 16 {
 		version 16
 	}
 	else {
@@ -14,7 +15,7 @@ program define stdtable, rclass
        [raw replace REPLACE2(string) by(string)                      ///
        BASERow(namelist min=1 max=1) BASECol(namelist min=1 max=1)   ///
        TOLerance(real 1e-6) ITERate(integer 16000) log        ///
-       Format(string) row col * ]
+       Format(string) name(string) row col * ]
 
 	if "`weight'" != "" local wgt "[`weight'`exp']"
 
@@ -56,7 +57,8 @@ program define stdtable, rclass
 			frame change `frame'
 		}
 	}
-	
+	if "`name'" == "" local name "stdtable"
+	confirm name `name'
 	
 	marksample touse, strok
 	gettoken by byopts : by, parse(",")
@@ -95,6 +97,7 @@ program define stdtable, rclass
 	if r(sum) == 0 error 2000
 
 	gettoken r c : varlist
+	local c : list clean c
 
 	bys `r' : gen byte `mark' = _n == 1
 	qui count if `mark'
@@ -275,14 +278,33 @@ program define stdtable, rclass
 
 
 	// display the result
-	if "`raw'" != "" {
-		local freqopt "`freq'"
+	if c(version) < 17 {
+		if "`raw'" != "" {
+			local freqopt "`freq'"
+		}
+		if "`by'" != "" {
+			local byopt "by(`by')"
+		}
+		tabdisp `r' `c' , `byopt' cellvar(`muhat' `freqopt') totals format(`format') `options'
 	}
-	if "`by'" != "" {
-		local byopt "by(`by')"
+	else {
+		if "`by'" != "" {
+			local bytot "totals(`by'#`r' `by'#`c' `by')"
+		}
+		if "`raw'" != "" {
+			local rawstat "stat(total `freq')"
+			if "`weight'" == "aweight" | "`weight'" == "iweight" {
+				label var `freq' "sum of weights"
+			}
+			else {
+				label var `freq' "observed"
+			}
+		}
+		label var `muhat' "standardized"
+ 		table (`by' `r') (`c'), stat(total `muhat') `rawstat' ///
+		      `bytot' zero nformat(`format') `options' name(`name') replace
 	}
-	tabdisp `r' `c' , `byopt' cellvar(`muhat' `freqopt') totals format(`format') `options'
-
+	
 	// restore or replace original data
 	if `"`replace'`replace2'"' == "" {
 		restore
@@ -291,7 +313,7 @@ program define stdtable, rclass
 		if "`raw'" != "" {
 			qui gen double _freq = `freq'
 			format _freq `format'
-			if "`weight'" == "pweight" {
+			if "`weight'" == "aweight" | "`weight'" == "iweight" {
 				label variable _freq "sum of weights"
 			}
 			else {
