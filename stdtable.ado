@@ -172,11 +172,6 @@ program define stdtable, rclass
 		drop `id'
 	}
 	else {
-		if `kc' == `kr' & "`row'`col'" != "" {
-			// the default is then to already show row and col percentages
-			local row ""
-			local col ""
-		} 
 		if `kc' != `kr' {
 			gen double `basec' = 100/`kc'
 			gen double `baser' = 100/`kr'
