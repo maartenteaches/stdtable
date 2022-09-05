@@ -1,5 +1,8 @@
 *! version 1.4.0 04Sep2022 MLB
-* use table for display
+*  use table for display
+*  row and col now also work for symmetric tables (relevant for raw counts)
+*  margins (only for display) are now computed using double precision instead of float
+
 program define stdtable, rclass
 	if c(version) >= 17 {
 		version 17
