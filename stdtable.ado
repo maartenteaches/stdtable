@@ -263,7 +263,7 @@ program define stdtable, rclass
 			bys `by' `c' (`r') : replace `tot' = sum(`freq')
 			bys `by' `c' (`tot') : replace `freq' = `tot'[_N] if missing(`r')
 		}
-	}
+	} // ends quitely
 
 	if "`row'" != "" {
 		qui bys `r' `by' (`c') : replace `muhat' = `muhat'/`muhat'[_N]*100 
@@ -441,7 +441,10 @@ program define Contract_w
                 error 2000 
         }
         keep `varlist' `expvar'
-        sort `varlist'
+        
+        // also sorting on `expvar' in the hope that adding the smaller values 
+        // first in a running sum improves precision
+        sort `varlist' `expvar'
 
         qui by `varlist' : gen double `freq' = sum(`expvar')
 		if "`weight'" == "iweight" | "`weight'" == "aweight" {
