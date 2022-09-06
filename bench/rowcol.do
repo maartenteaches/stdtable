@@ -14,26 +14,29 @@ label define occ 1 "upper nonmanual" ///
 label value row col occ
 label var row "Father's occupation"
 label var col "Son's occupation"
+preserve
 
 // row and col option should do nothing if ncol == nrow
 tempfile tofill
 stdtable row col [fw=pop] , raw replace
 rename std std1
 save `tofill'
-stdtable row col [fw=_freq] , raw row replace
+restore
+preserve
+stdtable row col [fw=pop] , raw col replace
+rename std std2
+merge 1:1 row col using `tofill'
+assert _merge == 3
+assert reldif(std1,std2) < 1e-6
+drop _merge
+restore 
+preserve
+stdtable row col [fw=pop] , raw col replace
 rename std std2
 merge 1:1 row col using `tofill'
 assert _merge == 3
 drop _merge
-save `tofill', replace
-stdtable row col [fw=_freq] , raw col replace
-rename std std3
-merge 1:1 row col using `tofill'
-assert _merge == 3
-drop _merge
-save `tofill', replace
 assert reldif(std1,std2) < 1e-6
-assert reldif(std1,std3) < 1e-6
 
 // row and col matter when ncol != nrow
 // open data
