@@ -41,6 +41,23 @@ drop if missing(meduc,feduc,coh)
 merge 1:1 meduc feduc coh using `temp'
 assert reldif(weight,_freq) < 1e-6 
 
+// ------------------------ Addtotallab
+if c(stata_version) >= 17 {
+    clear
+    set obs 1
+    gen x = .
+    Addtotallab x
+    assert x == .m
+    assert "`: value label x'" == "x_lb"
+    assert "`: label x_lb .m'" == "Total"
+
+    use bench\homogamy.dta, clear
+    Addtotallab meduc
+    assert meduc == .m if missing(meduc)
+    assert "`: value label meduc'" == "ed"
+    assert "`: label ed .m'" == "Total"
+}
+
 // ------------------------ Parseframe
 if c(stata_version) >= 16 {
 	Parseframe default, replace

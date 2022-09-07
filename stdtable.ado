@@ -286,9 +286,6 @@ program define stdtable, rclass
 		tabdisp `r' `c' , `byopt' cellvar(`muhat' `freqopt') totals format(`format') `options'
 	}
 	else {
-		if "`by'" != "" {
-			local bytot "totals(`by'#`r' `by'#`c' `by')"
-		}
 		if "`raw'" != "" {
 			local rawstat "stat(total `freq')"
 			if "`weight'" == "aweight" | "`weight'" == "iweight" {
@@ -298,9 +295,26 @@ program define stdtable, rclass
 				label var `freq' "observed"
 			}
 		}
-		label var `muhat' "standardized"
+        label var `muhat' "standardized"
+        
+        // make string variables numeric
+        capture confirm numeric variable `r'
+        if _rc == 7 {
+            tempvar rnum
+            qui encode `r', gen(`rnum')
+            local r `rnum'
+        }
+        capture confirm numeric variable `c'
+        if _rc == 7 {
+            tempvar cnum
+            qui encode `c', gen(`cnum')
+            local c `cnum'
+        }
+        Addtotallab `r'
+        Addtotallab `c'
+        
  		table (`by' `r') (`c'), stat(total `muhat') `rawstat' ///
-		      `bytot' zero nformat(`format') `options' name(`name') replace
+		      zero nformat(`format') `options' name(`name') replace nototals missing
 	}
 	
 	// restore or replace original data
@@ -367,6 +381,16 @@ program define Parseby, rclass
 		
 	}
 	return local by "`varlist'"
+end
+
+program define Addtotallab
+    syntax varname
+
+    qui replace `varlist' = .m if `varlist' == .
+    local labname : value label `varlist'
+    if "`labname'" == "" local labname "`varlist'_lb"
+    label define `labname' .m "Total", modify
+    label values `varlist' `labname'
 end
 
 program define Parseframe, rclass

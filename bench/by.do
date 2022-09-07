@@ -1,4 +1,5 @@
 cscript "by" adofiles stdtable
+include bench\_total.do
 
 // ------------------------------------------- margins all 100
 // check ipf against poisson, though not as easy for 0s, so remove those 
@@ -18,13 +19,13 @@ stdtable meduc feduc, by(coh, baseline(1970)) raw replace tol(1e-15)
 assert reldif(_freq,std) < 1e-6 if coh==1970
 
 // row totals should be equal across cohorts
-bys meduc (feduc): gen double dif = reldif(std,std[_N]) if feduc == .
-assert dif < 1e-6 if feduc == .
+bys meduc (feduc): gen double dif = reldif(std,std[_N]) if feduc == `tot'
+assert dif < 1e-6 if feduc == `tot'
 
 // column totals should be equal across cohorts
 drop dif
-bys feduc (meduc): gen double dif = reldif(std,std[_N]) if meduc == .
-assert dif < 1e-6 if meduc == .
+bys feduc (meduc): gen double dif = reldif(std,std[_N]) if meduc == `tot'
+assert dif < 1e-6 if meduc == `tot'
 
 // string in by()
 use bench\homogamy.dta, clear

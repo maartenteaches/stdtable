@@ -1,4 +1,5 @@
 cscript "check row and col options" adofiles stdtable
+include bench\_total.do
 
 // open data
 tabi 1414 521 302  643   40 \ ///
@@ -16,7 +17,7 @@ label var row "Father's occupation"
 label var col "Son's occupation"
 preserve
 
-// row and col option should do nothing if ncol == nrow
+// row and col option should only change one of the margins if ncol == nrow
 tempfile tofill
 stdtable row col [fw=pop] , raw replace
 rename std std1
@@ -27,16 +28,19 @@ stdtable row col [fw=pop] , raw col replace
 rename std std2
 merge 1:1 row col using `tofill'
 assert _merge == 3
-assert reldif(std1,std2) < 1e-6
+assert reldif(std1,std2) < 1e-6 if col < .
+assert reldif(std2, 20) < 1e-6 if col == `tot' & row != `tot'
+assert reldif(std2,100) < 1e-6 if col == `tot' & row == `tot'
 drop _merge
 restore 
-preserve
-stdtable row col [fw=pop] , raw col replace
+stdtable row col [fw=pop] , raw row replace
 rename std std2
 merge 1:1 row col using `tofill'
 assert _merge == 3
 drop _merge
-assert reldif(std1,std2) < 1e-6
+assert reldif(std1,std2) < 1e-6 if row < .
+assert reldif(std2, 20) < 1e-6 if row == `tot' & col != `tot'
+assert reldif(std2,100) < 1e-6 if row == `tot' & col == `tot'
 
 // row and col matter when ncol != nrow
 // open data
@@ -67,16 +71,16 @@ label value ed ed
 
 preserve
 stdtable support ed [fw=freq], raw replace row
-assert   std == 100 if ed == .      // rowtotals are 100
-assert _freq == 100 if ed == .      // raw is also row percentage, so rowtotal = 100 
+assert   std == 100 if ed == `tot'      // rowtotals are 100
+assert _freq == 100 if ed == `tot'      // raw is also row percentage, so rowtotal = 100 
 
 
 restore
 
 preserve
 stdtable support ed [fw=freq], raw replace col
-assert   std == 100 if support == . // coltotals are 100
-assert _freq == 100 if support == . // raw rowtotals are also 100
+assert   std == 100 if support == `tot' // coltotals are 100
+assert _freq == 100 if support == `tot' // raw rowtotals are also 100
 restore
 
 rcof "noi stdtable support ed [fw=freq], row col" == 198
@@ -84,12 +88,12 @@ rcof "noi stdtable support ed [fw=freq], row col" == 198
 use bench\homogamy.dta, clear
 preserve
 stdtable meduc feduc, by(coh, baseline(1970)) raw row replace tol(1e-15)
-assert   std == 100 if feduc == .      // rowtotals are 100
-assert _freq == 100 if feduc == .      // raw is also row percentage, so rowtotal = 100 
+assert   std == 100 if feduc == `tot'      // rowtotals are 100
+assert _freq == 100 if feduc == `tot'      // raw is also row percentage, so rowtotal = 100 
 restore
 
 preserve
 stdtable meduc feduc, by(coh, baseline(1970)) raw col replace tol(1e-15)
-assert   std == 100 if meduc == .      // coltotals are 100
-assert _freq == 100 if meduc == .      // raw is also col percentage, so coltotal = 100 
+assert   std == 100 if meduc == `tot'      // coltotals are 100
+assert _freq == 100 if meduc == `tot'      // raw is also col percentage, so coltotal = 100 
 restore

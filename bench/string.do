@@ -18,8 +18,8 @@ label var col "Son's occupation"
 stdtable row col [fw=pop], raw replace tol(1e-15)
 rename std std2
 
-decode row, gen(rowstring)
-decode col, gen(colstring)
+decode row if row < . , gen(rowstring)
+decode col if col < . , gen(colstring)
 tempfile temp
 save `temp'
 
