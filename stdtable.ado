@@ -34,8 +34,8 @@ program define stdtable, rclass
 		local format "%9.3g"
 	}
 	else {
-		capture display `format' 2
-		if _rc error 120
+		Rc_chk `"display `format' 2"' 120
+		if s(res) == "fail" error 120
 	}
 	if "`replace'" != "" & `"`replace2'"' != "" {
 		di as err "{p}replace can only be specified once{p_end}"
@@ -60,9 +60,17 @@ program define stdtable, rclass
 			frame change `frame'
 		}
 	}
-	if "`name'" == "" local name "stdtable"
-	confirm name `name'
-	
+	if c(version) < 17 {
+		if `"`name'"' != "" {
+			di as err "{p}the name() option can only be specified in Stata >= 17{p_end}"
+		}
+	}
+	else {
+		if `"`name'"' == ""{
+			local name "stdtable"
+		} 
+		confirm name `name'
+	}	
 	marksample touse, strok
 	gettoken by byopts : by, parse(",")
 	gettoken comma byopts : byopts, parse(",")
@@ -157,8 +165,7 @@ program define stdtable, rclass
 		}
 		matrix `ones' = J(`kc',1,1)
 		matrix `sumcol' = `basecol'*`ones'
-		capture assert mreldif(`sumcol', `sumrow') < `tolerance' 
-		if _rc{
+		if mreldif(`sumcol', `sumrow') > `tolerance'{
 			di as error "{p}the sums of the matrices in basecol() and baserow() need to be equal{p_end}"
 			exit 198
 		}
@@ -298,14 +305,14 @@ program define stdtable, rclass
         label var `muhat' "standardized"
         
         // make string variables numeric
-        capture confirm numeric variable `r'
-        if _rc == 7 {
+		Rc_chk "confirm numeric variable `r'" 7
+        if s(res) == "fail" {
             tempvar rnum
             qui encode `r', gen(`rnum')
             local r `rnum'
         }
-        capture confirm numeric variable `c'
-        if _rc == 7 {
+        Rc_chk "confirm numeric variable `c'" 7
+        if s(res) == "fail" {
             tempvar cnum
             qui encode `c', gen(`cnum')
             local c `cnum'
@@ -361,8 +368,9 @@ program define Parseby, rclass
 
 	if "`baseline'" != "" {
 		markout `touse' `varlist', strok
-		capture confirm string variable `varlist'
-		if _rc {
+		Rc_chk "confirm string variable `varlist'" 7
+		
+		if s(res) == "fail" {
 			qui count if `varlist' == `baseline' & `touse' == 1
 			if r(N) == 0 {
 				di as err "{p}the value `baseline' must occur in `varlist'{p_end}"
@@ -378,9 +386,25 @@ program define Parseby, rclass
 			}
 			return local baseline `"`baseline'"'
 		}
-		
-	}
+}
 	return local by "`varlist'"
+end
+
+program define Rc_chk , sclass
+	args tochk rc 
+	
+	capture `tochk'
+	if _rc == `rc' {
+		sreturn local res = "fail"
+	}
+	else if _rc == 0 {
+		sreturn local res = "pass"
+	}
+	else {
+		di as error "{p}Something happend that should never happen{p_end}"
+		di as error "{p}contact the developer{p_end}"
+		exit 198
+	}
 end
 
 program define Addtotallab
@@ -429,21 +453,21 @@ program define Contract_w
 
         * Check generated variables *
         if "`zero'" != "" {
-                capture confirm new variable _fillin
-                if _rc != 0 {
+                Rc_chk "confirm new variable _fillin" 110
+                if s(res) == "fail" {
                         di as error "_fillin already defined"
                         exit 110
                 }
         }
 
         if `"`freq'"' == "" {
-                capture confirm new variable _freq
-                if _rc == 0 {
+                Rc_chk "confirm new variable _freq" 110
+                if s(res) == "pass" {
                         local freq "_freq"
                 }
-                else {
-                        di as error "_freq already defined: " /*
-                        */ "use freq() option to specify frequency variable"
+                else if s(res) == "fail" {
+                        di as error "{p}_freq already defined: " /*
+                        */ "use freq() option to specify frequency variable{p_end}"
                         exit 110
                 }
         }
