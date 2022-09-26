@@ -74,3 +74,11 @@ if c(stata_version) >= 16 {
 
 	rcof "noi Parseframe default" == 110
 }
+
+
+// ----------------------- Rc_chk
+Rc_chk "assert 2==2" 9
+assert "`s(res)'" == "pass"
+Rc_chk "assert 2==3" 9
+assert "`s(res)'" == "fail"
+rcof `"noi Rc_chk "assert 2==3" 8"' == 198
