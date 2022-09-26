@@ -1,4 +1,5 @@
-*! version 1.4.0 04Sep2022 MLB
+*! version 1.4.1 26Sep2022 MLB
+*  adjust the helpfile
 *  use table for display
 *  row and col now also work for symmetric tables (relevant for raw counts)
 *  margins (only for display) are now computed using double precision instead of float

@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.4.0 MLB 26Sept2022}{...}
+{* *! version 1.4.1 MLB 26Sept2022}{...}
 {cmd:help stdtable}
 {hline}
 
